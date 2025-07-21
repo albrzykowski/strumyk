@@ -1,6 +1,4 @@
-# WF-net Validator
-
-## Strumyk DSL
+# Strumyk DSL
 
 [![Build](https://github.com/albrzykowski/strumyk/actions/workflows/tests.yaml/badge.svg)](https://github.com/albrzykowski/strumyk/actions/workflows/tests.yaml)
 [![Last Commit](https://img.shields.io/github/last-commit/albrzykowski/strumyk)](https://github.com/albrzykowski/strumyk/commits/main)
