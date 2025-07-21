@@ -28,6 +28,9 @@ transitions:
     label: <label>         # Optional label
 ```
 
+[See JSON Schema](https://github.com/albrzykowski/strumyk/blob/main/strumyk/data/schema.json)
+ 
+
 ### Example
 
 ```yaml
