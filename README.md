@@ -47,21 +47,57 @@ transitions:
 ### Example
 
 ```yaml
-net: Simple_Process
+net: ATM_Withdrawal
 version: "1.0"
 
 places:
   - id: start
-    label: Start
+    label: "Start"
+  - id: card_inserted
+    label: "Card Inserted"
+  - id: pin_entered
+    label: "PIN Entered"
+  - id: pin_validated
+    label: "PIN Validated"
+  - id: amount_selected
+    label: "Amount Selected"
+  - id: cash_dispensed
+    label: "Cash Dispensed"
   - id: end
-    label: End
+    label: "End"
 
 transitions:
-  - id: t_go
+  - id: insert_card
     input: [start]
+    output: [card_inserted]
+    label: "Insert Card"
+
+  - id: enter_pin
+    input: [card_inserted]
+    output: [pin_entered]
+    label: "Enter PIN"
+
+  - id: validate_pin
+    input: [pin_entered]
+    output: [pin_validated]
+    condition: "user['pin_correct'] == True"
+    label: "Validate PIN"
+
+  - id: select_amount
+    input: [pin_validated]
+    output: [amount_selected]
+    label: "Select Amount"
+
+  - id: dispense_cash
+    input: [amount_selected]
+    output: [cash_dispensed]
+    condition: "user['balance'] >= user['amount']"
+    label: "Dispense Cash"
+
+  - id: finish
+    input: [cash_dispensed]
     output: [end]
-    condition: "user['ready'] == True"
-    label: "Move from start to end"
+    label: "Eject Card and End"
 ```
 
 ### Semantics
@@ -82,10 +118,10 @@ transitions:
 Validate YAML models from the command line:
 
 ### Syntax validation (validates structure against JSON Schema)
-`python -m strumyk.cli syntax path/to/model.yaml path/to/schema.json`
+`python -m strumyk.cli validate-syntax path/to/model.yaml path/to/schema.json`
 
 ### Semantic validation (validates WF-net semantics)
-`python -m strumyk.cli semantic path/to/model.yaml`
+`python -m strumyk.cli validate-semantic path/to/model.yaml`
 
 ## Python API Usage
 

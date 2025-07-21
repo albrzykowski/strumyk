@@ -77,7 +77,7 @@ def main():
 
     # Sub-parser for the "syntax" command
     parser_syntax = subparsers.add_parser(
-        "syntax",
+        "validate-syntax",
         help="Perform syntax validation using a JSON schema."
     )
     parser_syntax.add_argument(
@@ -91,7 +91,7 @@ def main():
 
     # Sub-parser for the "semantic" command
     parser_semantic = subparsers.add_parser(
-        "semantic",
+        "validate-semantic",
         help="Perform semantic (WF-net) validation."
     )
     parser_semantic.add_argument(

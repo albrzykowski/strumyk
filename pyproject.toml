@@ -1,11 +1,17 @@
 [project]
 name = "strumyk"
 version = "0.1.0"
-description = "DSL for WF-net process modeling"
-authors = [{ name = "Twoje Imię" }]
+description = "Strumyk is a lightweight YAML-based domain-specific language (DSL) for modeling business processes using the formalism of workflow nets (WF-nets). It provides a human-readable syntax to describe states (places), transitions, and guard conditions in a structured and semantically rich way."
+authors = [{ name = "LA" }]
 readme = "README.md"
 requires-python = ">=3.8"
-dependencies = ["pyyaml", "jsonschema"]
+dependencies = [
+  "jsonschema==4.25.0",
+  "PyYAML==6.0.2",
+  "pytest~=8.4.1",
+  "ruff>=0.12.2,<0.13.0",
+  "coverage~=7.9.2"
+]
 
 [project.scripts]
 strumyk-validate = "strumyk.cli:main"
