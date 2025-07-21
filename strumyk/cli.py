@@ -1,6 +1,5 @@
 import argparse
 import sys
-from typing import List
 from .syntax_validator import SyntaxValidator
 from .semantic_validator import SemanticValidator, SemanticValidationError
 
