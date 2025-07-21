@@ -10,6 +10,21 @@
 
 Strumyk DSL is a domain-specific language designed for describing WF-net-based process models in YAML format. It allows you to define places, transitions, and optional conditions for transitions using Python expressions.
 
+### What is a WF-net?
+
+A **WF-net** (Workflow net) is a specialized type of Petri net designed to model business processes or workflows. It is a formal graphical tool that helps represent the states and transitions within a process, enabling analysis and verification of process correctness.
+
+WF-nets consist mainly of two types of elements:
+
+- **Places**: These represent conditions or states in the process. For example, a place can indicate a specific step is ready to start, or a resource is available. Places are typically depicted as circles.
+
+- **Transitions**: These represent events or actions that can change the state of the process. For example, a transition may represent the execution of a task, a decision point, or the completion of an activity. Transitions are usually depicted as rectangles or bars.
+
+In a WF-net, places and transitions are connected by directed arcs showing the flow from one state to another, defining how the process progresses.
+
+The Strumyk DSL allows you to define WF-nets in a YAML format, specifying places and transitions clearly, including conditions on transitions that express business logic using Python expressions.
+
+
 ### Syntax Overview
 
 ```yaml
