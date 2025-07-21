@@ -47,49 +47,28 @@ transitions:
 ### Example
 
 ```yaml
-net: ATM_Withdrawal
+net: Simple_ATM_Withdrawal
 version: "1.0"
 
 places:
   - id: start
     label: "Start"
-  - id: card_inserted
-    label: "Card Inserted"
-  - id: pin_entered
-    label: "PIN Entered"
   - id: pin_validated
     label: "PIN Validated"
-  - id: amount_selected
-    label: "Amount Selected"
   - id: cash_dispensed
     label: "Cash Dispensed"
   - id: end
     label: "End"
 
 transitions:
-  - id: insert_card
-    input: [start]
-    output: [card_inserted]
-    label: "Insert Card"
-
-  - id: enter_pin
-    input: [card_inserted]
-    output: [pin_entered]
-    label: "Enter PIN"
-
   - id: validate_pin
-    input: [pin_entered]
+    input: [start]
     output: [pin_validated]
     condition: "user['pin_correct'] == True"
     label: "Validate PIN"
 
-  - id: select_amount
-    input: [pin_validated]
-    output: [amount_selected]
-    label: "Select Amount"
-
   - id: dispense_cash
-    input: [amount_selected]
+    input: [pin_validated]
     output: [cash_dispensed]
     condition: "user['balance'] >= user['amount']"
     label: "Dispense Cash"
@@ -97,15 +76,8 @@ transitions:
   - id: finish
     input: [cash_dispensed]
     output: [end]
-    label: "Eject Card and End"
+    label: "End Transaction"
 ```
-
-### Semantics
-
-- A place represents a state in the process.
-- A transition represents an action that moves tokens from input places to output places.
-- The `condition` field is a Python boolean expression that must evaluate to `True` for the transition to fire.
-- The model must follow WF-net axioms: a unique source, a unique sink, and strong connectivity.
 
 ## CLI Usage
 
