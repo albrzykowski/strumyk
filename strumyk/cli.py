@@ -1,41 +1,8 @@
 import argparse
 import sys
 from typing import List
-
-# --- Mock Objects for Demonstration ---
-# In a real scenario, these would be imported from your library.
-# This allows the script to run standalone for testing purposes.
-
-class MockValidationError:
-    def __init__(self, message, path):
-        self.message = message
-        self.path = path
-
-class SyntaxValidator:
-    def __init__(self, yaml_path: str, schema_path: str):
-        print(f"-> Initializing SyntaxValidator for '{yaml_path}' with schema '{schema_path}'")
-        if "bad_syntax" in yaml_path:
-            self._errors = [MockValidationError("Invalid type for 'places'", ["places"])]
-        else:
-            self._errors = []
-
-    def run(self) -> List[MockValidationError]:
-        return self._errors
-
-class SemanticValidationError(Exception):
-    pass
-
-class SemanticValidator:
-    def __init__(self, yaml_path: str):
-        print(f"-> Initializing SemanticValidator for '{yaml_path}'")
-        self._path = yaml_path
-
-    def validate(self):
-        if "bad_semantic" in self._path:
-            raise SemanticValidationError("Multiple source places found.")
-        # If validation is successful, do nothing.
-
-# --- Core Functions ---
+from .syntax_validator import SyntaxValidator
+from .semantic_validator import SemanticValidator, SemanticValidationError
 
 def run_syntax_validation(yaml_path: str, schema_path: str) -> bool:
     """

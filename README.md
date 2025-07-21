@@ -10,7 +10,7 @@ Strumyk DSL is a domain-specific language designed for describing WF-net-based p
 
 ### What is a WF-net?
 
-A **WF-net** (Workflow net) is a specialized type of Petri net designed to model business processes or workflows. It is a formal graphical tool that helps represent the states and transitions within a process, enabling analysis and verification of process correctness.
+A **WF-net** also called [Workflow net](https://en.wikipedia.org/wiki/Petri_net) is a specialized type of Petri net designed to model business processes or workflows. It is a formal graphical tool that helps represent the states and transitions within a process, enabling analysis and verification of process correctness.
 
 WF-nets consist mainly of two types of elements:
 
