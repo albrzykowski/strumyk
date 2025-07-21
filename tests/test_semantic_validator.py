@@ -1,6 +1,5 @@
 import tempfile
 import pytest
-import yaml
 from strumyk.semantic_validator import SemanticValidator, SemanticValidationError
  
 def write_temp_yaml(content):
