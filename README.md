@@ -2,8 +2,8 @@
 
 ## Strumyk DSL
 
-[![Tests](https://github.com/albrzykowski/strumyk/actions/workflows/pytest.yml/badge.svg)](https://github.com/albrzykowski/strumyk/actions/workflows/pytest.yml)
-[![Last Commit](https://img.shields.io/github/last-commit/albrzykowski/strumyk)](https://github.com/albrzykowski/strumyk/commits/main)
+[![Build](https://github.com/albrzykowski/strumyk/actions/workflows/tests.yml/badge.svg)](https://github.com/albrzykowski/strumyk/actions/workflows/tests.yml)[![Last Commit](https://img.shields.io/github/last-commit/albrzykowski/strumyk)](https://github.com/albrzykowski/strumyk/commits/main)
+![License](https://img.shields.io/github/license/albrzykowski/strumyk)
 [![Python Supported](https://img.shields.io/pypi/pyversions/strumyk)](https://github.com/albrzykowski/strumyk)
 [![Lint: ruff](https://img.shields.io/badge/lint%20%3A-ruff-green)](https://github.com/albrzykowski/strumyk)
 
