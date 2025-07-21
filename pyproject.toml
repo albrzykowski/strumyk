@@ -1,0 +1,15 @@
+[project]
+name = "strumyk"
+version = "0.1.0"
+description = "DSL for WF-net process modeling"
+authors = [{ name = "Twoje Imię" }]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["pyyaml", "jsonschema"]
+
+[project.scripts]
+strumyk-validate = "strumyk.cli:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
