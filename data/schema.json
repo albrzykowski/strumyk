@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Strumyk Schema",
+  "title": "Strumyk DSL Schema v1.0",
   "type": "object",
   "required": ["net", "version", "places", "transitions"],
   "properties": {
@@ -13,9 +13,10 @@
     },
     "places": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "object",
-        "required": ["id", "label"],
+        "required": ["id"],
         "properties": {
           "id": { "type": "string" },
           "label": { "type": "string" }
@@ -25,18 +26,21 @@
     },
     "transitions": {
       "type": "array",
+      "uniqueItems": true,
       "items": {
         "type": "object",
-        "required": ["id", "input", "output", "condition", "label"],
+        "required": ["id", "input", "output"],
         "properties": {
           "id": { "type": "string" },
           "input": {
             "type": "array",
+            "uniqueItems": true,
             "items": { "type": "string" },
             "minItems": 1
           },
           "output": {
             "type": "array",
+            "uniqueItems": true,
             "items": { "type": "string" },
             "minItems": 1
           },
