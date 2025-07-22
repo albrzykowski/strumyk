@@ -101,29 +101,20 @@ Use the validators in your Python code:
 
 ```
 from strumyk.syntax_validator import SyntaxValidator
-from strumyk.semantic_validator import SemanticValidator, SemanticValidationError
+from strumyk.semantic_validator import SemanticValidator
 
 # --- Syntax Validation ---
 yaml_file = "example.yaml"
 schema_file = "schema.json"
 
 syntax_validator = SyntaxValidator(yaml_file, schema_file)
-syntax_errors = syntax_validator.run()
+is_valid = syntax_validator.validate()
 
-if syntax_errors:
-    for e in syntax_errors:
-        path_str = ".".join(str(p) for p in e.path)
-        print(f"[{path_str}] {e.message}")
-else:
-    print("✅ Syntax is valid")
 
 # --- Semantic Validation ---
-try:
-    semantic_validator = SemanticValidator(yaml_file)
-    semantic_validator.validate()
-    print("✅ Semantics are valid")
-except SemanticValidationError as e:
-    print(f"❌ Semantic validation error: {e}")
+
+semantic_validator = SemanticValidator(yaml_file)
+is_valid = semantic_validator.validate()
 ```
 
 ## Installation

@@ -1,6 +1,6 @@
 jsonschema~=4.25.0
 PyYAML~=6.0.2
-networkx
+networkx~=3.4.2
 pytest~=8.4.1
 ruff>=0.12.2,<0.13.0
 coverage~=7.9.2
