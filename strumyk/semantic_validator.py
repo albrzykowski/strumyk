@@ -1,18 +1,21 @@
 import yaml
 import networkx as nx
+from .validator import Validator
 
 class SemanticValidationError(Exception):
     pass
 
-class SemanticValidator:
+class SemanticValidator(Validator):
     def __init__(self, yaml_path):
         self.net_definition = self._load_yaml(yaml_path)
         self._build_graph()
         
     def validate(self):
-        self.check_single_start_place_axiom()
-        self.check_single_end_place_axiom()
-        self.check_all_nodes_on_path_axiom()
+        single_start_valid, _ = self.check_single_start_place_axiom()
+        single_end_valid, _ = self.check_single_end_place_axiom()
+        nodes_on_path_valid, _ = self.check_all_nodes_on_path_axiom()
+        
+        return single_start_valid and single_end_valid and nodes_on_path_valid
             
     def check_single_start_place_axiom(self):
         all_places = {p['id'] for p in self.net_definition['places']}
@@ -22,7 +25,6 @@ class SemanticValidator:
 
         return is_valid, source_places
 
-        
     def check_single_end_place_axiom(self):
         all_places = {p['id'] for p in self.net_definition['places']}
         places_with_output_arcs = {u for u, v in self.graph.edges()}

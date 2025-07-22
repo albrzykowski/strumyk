@@ -83,9 +83,9 @@ transitions:
 
 ### Validators Overview
 
-- SyntaxValidator checks whether a YAML file conforms to a given JSON Schema. It verifies the structural correctness of the file (e.g., required fields, value types, object structure).
+- **SyntaxValidator** checks whether a YAML file conforms to a given JSON Schema. It verifies the structural correctness of the file (e.g., required fields, value types, object structure).
 
-- SemanticValidator performs domain-specific validation of a WF-net (Workflow net) encoded in YAML. It checks formal properties like unique source/sink places, reachability, and strong connectivity.
+- **SemanticValidator** performs domain-specific validation of a WF-net (Workflow net) encoded in YAML. It checks formal properties: unique source/sink places and strong connectivity.
 
 Validate YAML models from the command line:
 

@@ -73,9 +73,9 @@ def test_valid_yaml_and_schema(create_temp_file):
     schema_path = create_temp_file(json.dumps(valid_schema), ".json")
 
     validator = SyntaxValidator(yaml_path, schema_path)
-    errors = validator.run()
+    is_valid = validator.validate()
 
-    assert errors == []
+    assert is_valid == True
 
 def test_invalid_yaml_schema(create_temp_file):
     invalid_yaml_content = """
@@ -88,8 +88,10 @@ def test_invalid_yaml_schema(create_temp_file):
     yaml_path = create_temp_file(invalid_yaml_content, ".yaml")
     schema_path = create_temp_file(json.dumps(valid_schema), ".json")
     validator = SyntaxValidator(yaml_path, schema_path)
-    errors = validator.run()
+    is_valid = validator.validate()
 
-    assert len(errors) > 0
+    assert is_valid == False
+    """
     messages = [e.message for e in errors]
     assert any("label" in msg for msg in messages)
+    """

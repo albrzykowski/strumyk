@@ -4,29 +4,17 @@ from .syntax_validator import SyntaxValidator
 from .semantic_validator import SemanticValidator, SemanticValidationError
 
 def run_syntax_validation(yaml_path: str, schema_path: str) -> bool:
-    """
-    Performs syntax validation on a YAML file using a JSON schema.
 
-    Args:
-        yaml_path: The path to the YAML file.
-        schema_path: The path to the JSON schema file.
-
-    Returns:
-        True if validation is successful, False otherwise.
-    """
     print("\n--- Running Syntax Validation ---")
     try:
         validator = SyntaxValidator(yaml_path, schema_path)
-        errors = validator.run()
+        is_valid = validator.validate()
 
-        if not errors:
+        if not is_valid:
             print("✅ Syntax validation successful.")
             return True
         else:
-            print("❌ Syntax validation failed:")
-            for e in errors:
-                path_str = ".".join(str(p) for p in e.path) if e.path else "root"
-                print(f" - [{path_str}] {e.message}")
+            print("❌ Syntax validation failed:"))
             return False
     except FileNotFoundError as e:
         print(f"❌ Error: File not found: {e.filename}")
@@ -36,21 +24,17 @@ def run_syntax_validation(yaml_path: str, schema_path: str) -> bool:
         return False
 
 def run_semantic_validation(yaml_path: str) -> bool:
-    """
-    Performs semantic validation for a WF-net defined in a YAML file.
 
-    Args:
-        yaml_path: The path to the YAML file.
-
-    Returns:
-        True if validation is successful, False otherwise.
-    """
     print("\n--- Running Semantic Validation ---")
     try:
         validator = SemanticValidator(yaml_path)
-        validator.validate()
-        print("✅ Semantic validation successful.")
-        return True
+        is_valid = validator.validate()
+        if not is_valid:
+            print("✅ Semantic validation successful.")
+            return True
+        else:
+            print("❌ Semantic validation failed:")
+            return False
     except SemanticValidationError as se:
         print(f"❌ Semantic validation failed: {se}")
         return False
@@ -62,9 +46,7 @@ def run_semantic_validation(yaml_path: str) -> bool:
         return False
 
 def main():
-    """
-    Main function to parse command-line arguments and run validators.
-    """
+
     parser = argparse.ArgumentParser(
         description="A command-line tool to validate Strumyk YAML files.",
         epilog="Example: cli.py syntax my_net.yaml my_schema.json"
