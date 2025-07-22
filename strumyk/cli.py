@@ -14,7 +14,7 @@ def run_syntax_validation(yaml_path: str, schema_path: str) -> bool:
             print("✅ Syntax validation successful.")
             return True
         else:
-            print("❌ Syntax validation failed:"))
+            print("❌ Syntax validation failed:")
             return False
     except FileNotFoundError as e:
         print(f"❌ Error: File not found: {e.filename}")

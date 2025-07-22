@@ -75,7 +75,7 @@ def test_valid_yaml_and_schema(create_temp_file):
     validator = SyntaxValidator(yaml_path, schema_path)
     is_valid = validator.validate()
 
-    assert is_valid == True
+    assert is_valid
 
 def test_invalid_yaml_schema(create_temp_file):
     invalid_yaml_content = """
@@ -90,7 +90,7 @@ def test_invalid_yaml_schema(create_temp_file):
     validator = SyntaxValidator(yaml_path, schema_path)
     is_valid = validator.validate()
 
-    assert is_valid == False
+    assert not is_valid
     """
     messages = [e.message for e in errors]
     assert any("label" in msg for msg in messages)
