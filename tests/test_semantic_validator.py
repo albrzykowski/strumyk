@@ -71,4 +71,28 @@ def test_single_end_place_axiom_valid(create_yaml_file):
     is_valid, sinks = validator.check_single_end_place_axiom()
     
     assert is_valid is True
-    assert sinks == {'p_end'}    
+    assert sinks == {'p_end'} 
+
+def test_all_nodes_on_path_axiom_valid(create_yaml_file):
+    yaml_content = """
+    net: Sample_Process
+    version: "1.0"
+    places:
+      - id: p_start
+      - id: p_sample
+      - id: p_end
+    transitions:
+      - id: t1
+        input: [p_start]
+        output: [p_sample]
+      - id: t2
+        input: [p_sample]
+        output: [p_end]
+    """
+    yaml_path = create_yaml_file(yaml_content)
+    validator = SemanticValidator(yaml_path)
+    
+    is_valid, unreachable = validator.check_all_nodes_on_path_axiom()
+    
+    assert is_valid is True
+    assert unreachable == set()     

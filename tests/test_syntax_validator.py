@@ -3,20 +3,6 @@ import pytest
 import json
 from strumyk.syntax_validator import SyntaxValidator  # adjust import as needed
 
-valid_yaml_content = """
-net: ExampleNet
-version: "1.0"
-places:
-  - id: p1
-    label: Start
-transitions:
-  - id: t1
-    input: [p1]
-    output: [p1]
-    condition: "True"
-    label: "Test transition"
-"""
-
 valid_schema = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
@@ -52,14 +38,6 @@ valid_schema = {
     }
 }
 
-invalid_yaml_content = """
-net: ExampleNet
-version: "1.0"
-places:
-  - id: p1
-transitions: []
-"""
-
 @pytest.fixture
 def create_temp_file():
     files = []
@@ -70,7 +48,6 @@ def create_temp_file():
         files.append(f.name)
         return f.name
     yield _create
-    # cleanup
     import os
     for file in files:
         try:
@@ -79,20 +56,40 @@ def create_temp_file():
             pass
 
 def test_valid_yaml_and_schema(create_temp_file):
+    valid_yaml_content = """
+        net: ExampleNet
+        version: "1.0"
+        places:
+          - id: p1
+            label: Start
+        transitions:
+          - id: t1
+            input: [p1]
+            output: [p1]
+            condition: "True"
+            label: "Test transition"
+        """
     yaml_path = create_temp_file(valid_yaml_content, ".yaml")
     schema_path = create_temp_file(json.dumps(valid_schema), ".json")
 
     validator = SyntaxValidator(yaml_path, schema_path)
     errors = validator.run()
+
     assert errors == []
 
 def test_invalid_yaml_schema(create_temp_file):
+    invalid_yaml_content = """
+        net: ExampleNet
+        version: "1.0"
+        places:
+          - id: p1
+        transitions: []
+        """
     yaml_path = create_temp_file(invalid_yaml_content, ".yaml")
     schema_path = create_temp_file(json.dumps(valid_schema), ".json")
-
     validator = SyntaxValidator(yaml_path, schema_path)
     errors = validator.run()
+
     assert len(errors) > 0
-    # Confirm error relates to missing 'label' in places
     messages = [e.message for e in errors]
     assert any("label" in msg for msg in messages)
