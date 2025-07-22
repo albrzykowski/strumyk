@@ -37,7 +37,7 @@ transitions:
   - id: <transition_id>    # Unique identifier of the transition
     input: [<place_id>]    # List of input places
     output: [<place_id>]   # List of output places
-    condition: "<expr>"    # Optional condition in Python syntax
+    condition: "<expr>"    # Optional condition syntax
     label: <label>         # Optional label
 ```
 

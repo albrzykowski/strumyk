@@ -1,7 +1,7 @@
 import tempfile
 import pytest
 import os
-from strumyk.semantic_validator import SemanticValidator, SemanticValidationError
+from strumyk.semantic_validator import SemanticValidator
     
 @pytest.fixture
 def create_yaml_file():
