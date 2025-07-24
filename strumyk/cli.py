@@ -1,7 +1,9 @@
 import argparse
 import sys
+import json
 from .syntax_validator import SyntaxValidator
 from .semantic_validator import SemanticValidator, SemanticValidationError
+from .simulator import Simulator
 
 def run_syntax_validation(yaml_path: str, schema_path: str) -> bool:
 
@@ -10,7 +12,7 @@ def run_syntax_validation(yaml_path: str, schema_path: str) -> bool:
         validator = SyntaxValidator(yaml_path, schema_path)
         is_valid = validator.validate()
 
-        if not is_valid:
+        if is_valid:
             print("✅ Syntax validation successful.")
             return True
         else:
@@ -29,7 +31,7 @@ def run_semantic_validation(yaml_path: str) -> bool:
     try:
         validator = SemanticValidator(yaml_path)
         is_valid = validator.validate()
-        if not is_valid:
+        if is_valid:
             print("✅ Semantic validation successful.")
             return True
         else:
@@ -44,6 +46,26 @@ def run_semantic_validation(yaml_path: str) -> bool:
     except Exception as e:
         print(f"❗ An unexpected error occurred during semantic validation: {e}")
         return False
+
+def run_simulator(yaml_path: str, raw_context: str) -> bool:
+
+    print("\n--- Running Simulator ---")
+    try:
+        context_data = json.loads(raw_context)
+    except json.JSONDecodeError as e:
+        return False
+    try:
+        simulator = Simulator(yaml_path, context_data)
+        is_success = simulator.simulate()
+        if is_success:
+            print("✅ Simulation successful.")
+            return True
+        else:
+            print("❌ Simulation failed")
+            return False
+    except Exception as e:
+        print(f"❗ An error occurred during simulation: {e}")
+        return False        
 
 def main():
 
@@ -80,20 +102,38 @@ def main():
         "yaml_file",
         help="Path to the YAML file to validate."
     )
+    
+    # Sub-parser for the "sumulator" command
+    parser_semantic = subparsers.add_parser(
+        "simulate",
+        help="Perform (WF-net) simulation for given context."
+    )
+    parser_semantic.add_argument(
+        "yaml_file",
+        help="Path to the YAML file to validate."
+    )
+    parser_semantic.add_argument(
+        "context",
+        help="JSON with sample context that will try to travel the graph."
+    )
+    
 
     args = parser.parse_args()
 
     success = False
-    if args.command == "syntax":
+    
+    if args.command == "validate-syntax":
         success = run_syntax_validation(args.yaml_file, args.schema_file)
-    elif args.command == "semantic":
+    elif args.command == "validate-semantic":
         success = run_semantic_validation(args.yaml_file)
+    elif args.command == "simulate":
+        success = run_simulator(args.yaml_file, args.context)
 
     if success:
-        print("\n🎉 Validation finished successfully.")
+        print("\n🎉 Task finished successfully.")
         sys.exit(0)
     else:
-        print("\nValidation finished with errors.")
+        print("\nTask finished with errors.")
         sys.exit(1)
 
 if __name__ == "__main__":

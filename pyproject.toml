@@ -1,7 +1,7 @@
 [project]
 name = "strumyk"
 version = "0.1.0"
-description = "Strumyk is a lightweight YAML-based domain-specific language (DSL) for modeling business processes using the formalism of workflow nets (WF-nets). It provides a human-readable syntax to describe states (places), transitions, and guard conditions in a structured and semantically rich way."
+description = "Strumyk is a lightweight YAML-based domain-specific language (DSL) for modeling business processes using the formalism of workflow nets (WF-nets). It provides a human-readable syntax to describe states (places) and transitions."
 authors = [{ name = "LA" }]
 readme = "README.md"
 requires-python = ">=3.11"
@@ -18,5 +18,11 @@ dependencies = [
 strumyk-validate = "strumyk.cli:main"
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=69.5"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = { find = {} }
+
+[tool.setuptools.packages.find]
+include = ["strumyk"]

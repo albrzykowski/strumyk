@@ -2,14 +2,14 @@ net: Simple_Process
 version: "1.0"
 
 places:
-  - id: start
+  - id: p_start
     label: Start
-  - id: end
+  - id: p_end
     label: End
 
 transitions:
   - id: t_go
-    input: [start]
-    output: [end]
+    input: [p_start]
+    output: [p_end]
     condition: "user['ready'] == True"
     label: "Move from start to end"
