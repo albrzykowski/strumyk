@@ -50,6 +50,8 @@ net: The_Investigation
 version: "1.0"
 
 places:
+  - id: start
+    label: "Initial Observation"
   - id: morgue
     label: "Morgue Incident"
   - id: hypothesis
@@ -59,7 +61,7 @@ places:
 
 transitions:
   - id: discover_disappearance
-    input: []
+    input: [start]
     output: [morgue]
     label: "Body Disappears from Morgue"
 
