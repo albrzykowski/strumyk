@@ -1,57 +1,64 @@
 import yaml
 import logging
+from pathlib import Path
+from typing import Dict, Any, List
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 
 class Simulator:
-    def __init__(self, yaml_path: str, context: dict):
-        yaml_text = self._load_file(yaml_path)
-        self.net = yaml.safe_load(yaml_text)
-        self.places = {p['id']: 0 for p in self.net['places']}
-        self.transitions = self.net['transitions']
-        self.context = context
-        self.trace = []
+    def __init__(self, yaml_path: Path, context: Dict[str, Any]):
+        net_definition = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
+        self.places: Dict[str, int] = {p["id"]: 0 for p in net_definition.get("places", [])}
+        self.transitions: List[Dict[str, Any]] = net_definition.get("transitions", [])
+        self.context: Dict[str, Any] = context
+        self.trace: List[str] = []
 
-    def set_token(self, place_id: str, count: int = 1):
-        self.places[place_id] = count
-
-    def evaluate_condition(self, condition: str) -> bool:
+    def _evaluate_condition(self, condition: str) -> bool:
         try:
             return bool(eval(condition, {}, self.context))
         except Exception as e:
-            logger.error(f"Condition error: {e} -> '{condition}'")
+            logger.error(f"Error evaluating condition '{condition}': {e}")
             return False
 
-    def enabled_transitions(self):
-        enabled = []
-        for t in self.transitions:
-            if all(self.places.get(p, 0) > 0 for p in t['input']):
-                cond = t.get('condition')
-                if cond is None or self.evaluate_condition(cond):
-                    enabled.append(t)
-        return enabled
+    def get_enabled_transitions(self) -> List[Dict[str, Any]]:
+        return [
+            t for t in self.transitions
+            if all(self.places.get(p, 0) > 0 for p in t.get("input", []))
+            and (t.get("condition") is None or self._evaluate_condition(t.get("condition")))
+        ]
 
-    def fire_transition(self, t: dict):
-        logger.debug(f"→ Transition: {t['id']}")
-        self.trace.append(t['id'])
-        for p in t['input']:
+    def fire_transition(self, transition: Dict[str, Any]) -> None:
+        transition_id = transition.get("id", "Unnamed Transition")
+        logger.debug(f"→ Firing transition: {transition_id}")
+        self.trace.append(transition_id)
+        
+        for p in transition.get("input", []):
             self.places[p] -= 1
-        for p in t['output']:
+        for p in transition.get("output", []):
             self.places[p] += 1
-        logger.debug(f"   Places: {self.places}")
+            
+        logger.debug(f"  New marking: {self.places}")
 
-    def simulate(self, start_place='p_start', end_place='p_end'):
-        self.set_token(start_place)
-        logger.debug(f"Initial: {self.places}")
-        while self.places[end_place] == 0:
-            enabled = self.enabled_transitions()
-            if not enabled:
-                logger.error("✖ Deadlock – no enabled transitions.")
+    def run(self, start_place: str = 'p_start', end_place: str = 'p_end', max_steps: int = 1000) -> bool:
+        if start_place not in self.places or end_place not in self.places:
+            logger.error(f"Error: Start ('{start_place}') or end ('{end_place}') place not found in the net.")
+            return False
+
+        self.places[start_place] = 1
+        logger.debug(f"Initial marking: {self.places}")
+
+        for step in range(max_steps):
+            if self.places.get(end_place, 0) > 0:
+                logger.info(f"✅ Simulation successful. Reached end place '{end_place}' in {step} steps.")
+                return True
+
+            enabled_transitions = self.get_enabled_transitions()
+            
+            if not enabled_transitions:
+                logger.error("✖ Deadlock: No enabled transitions found.")
                 return False
-            self.fire_transition(enabled[0])
-        return True
+                
+            self.fire_transition(enabled_transitions[0])
 
-    def _load_file(self, filepath: str) -> str:
-        with open(filepath, "r", encoding="utf-8") as f:
-            return f.read()
+        logger.error(f"✖ Simulation failed: Exceeded maximum of {max_steps} steps.")
+        return False

@@ -105,7 +105,7 @@ imulate process from the command line:
 
 ### Process simulation (for given context)
 
-`python -m strumyk.cli path/to/model.yaml '{"user": {"account_active": true}}'`
+`python -m strumyk.cli path/to/model.yaml '{"user": {"pin_correct": true, "balance": 100, "amount": 90}}'`
 
 ## Python API Usage
 
