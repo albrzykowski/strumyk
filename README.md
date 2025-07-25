@@ -101,7 +101,7 @@ Validate YAML models from the command line:
 
 - **Simulator** loads a workflow net from a YAML file and simulates its execution by firing transitions based on context.
 
-imulate process from the command line:
+Simulate process from the command line:
 
 ### Process simulation (for given context)
 
@@ -115,13 +115,12 @@ How to use the validators in your Python code:
 from strumyk.syntax_validator import SyntaxValidator
 from strumyk.semantic_validator import SemanticValidator
 
-# --- Syntax Validation ---
 yaml_file = "example.yaml"
 schema_file = "schema.json"
 
+# --- Syntax Validation ---
 syntax_validator = SyntaxValidator(yaml_file, schema_file)
 is_valid = syntax_validator.validate()
-
 
 # --- Semantic Validation ---
 semantic_validator = SemanticValidator(yaml_file)
@@ -131,6 +130,11 @@ is_valid = semantic_validator.validate()
 How to use the simulator in your Python code:
 
 ```
+from strumyk.simulator import Simulator
+
+yaml_file = "example.yaml"
+context = '{"user": {"email": john.doe@example.com}}'
+
 # --- Process simulation ---
 simulator = Simulator(yaml_file, context)
 is_valid = simulator.simulate()
