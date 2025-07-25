@@ -1,15 +1,29 @@
-net: Simple_Process
+net: The_Investigation
+# Example inspired by Stanisław Lem’s novel The Investigation (https://en.wikipedia.org/wiki/The_Investigation)
 version: "1.0"
 
 places:
-  - id: p_start
-    label: Start
-  - id: p_end
-    label: End
+  - id: morgue
+    label: "Morgue Incident"
+  - id: hypothesis
+    label: "Competing Hypotheses"
+  - id: resolution
+    label: "Uncertain Conclusion"
 
 transitions:
-  - id: t_go
-    input: [p_start]
-    output: [p_end]
-    condition: "user['ready'] == True"
-    label: "Move from start to end"
+  - id: discover_disappearance
+    input: []
+    output: [morgue]
+    label: "Body Disappears from Morgue"
+
+  - id: explore_explanations
+    input: [morgue]
+    output: [hypothesis]
+    condition: "user['open_mindedness'] >= 40"
+    label: "Analyze Statistical & Rational Hypotheses"
+
+  - id: accept_uncertainty
+    input: [hypothesis]
+    output: [resolution]
+    condition: "user['need_for_closure'] <= 30"
+    label: "Accept Lack of Closure"

@@ -5,8 +5,7 @@
 ![License](https://img.shields.io/github/license/albrzykowski/strumyk)
 [![Lint: ruff](https://img.shields.io/badge/lint%20%3A-ruff-green)](https://github.com/albrzykowski/strumyk)
 
-
-Strumyk DSL is a domain-specific language designed for describing WF-net-based process models in YAML format. It allows you to define places, transitions, and optional conditions for transitions using Python expressions.
+Strumyk is a lightweight YAML-based domain-specific language (DSL) for modeling business processes using the formalism of workflow nets (WF-nets). It provides a human-readable syntax to describe states (places) and transitions.
 
 ### What is a WF-net?
 
@@ -44,39 +43,37 @@ transitions:
 [See JSON Schema](https://github.com/albrzykowski/strumyk/blob/main/data/schema.json)
  
 
-### Example
+### Example (Inspired by Stanisław Lem's novel [*The Investigation*](https://en.wikipedia.org/wiki/The_Investigation)) 
 
 ```yaml
-net: Simple_ATM_Withdrawal
+net: The_Investigation
 version: "1.0"
 
 places:
-  - id: start
-    label: "Start"
-  - id: pin_validated
-    label: "PIN Validated"
-  - id: cash_dispensed
-    label: "Cash Dispensed"
-  - id: end
-    label: "End"
+  - id: morgue
+    label: "Morgue Incident"
+  - id: hypothesis
+    label: "Competing Hypotheses"
+  - id: resolution
+    label: "Uncertain Conclusion"
 
 transitions:
-  - id: validate_pin
-    input: [start]
-    output: [pin_validated]
-    condition: "user['pin_correct'] == True"
-    label: "Validate PIN"
+  - id: discover_disappearance
+    input: []
+    output: [morgue]
+    label: "Body Disappears from Morgue"
 
-  - id: dispense_cash
-    input: [pin_validated]
-    output: [cash_dispensed]
-    condition: "user['balance'] >= user['amount']"
-    label: "Dispense Cash"
+  - id: explore_explanations
+    input: [morgue]
+    output: [hypothesis]
+    condition: "user['open_mindedness'] >= 40"
+    label: "Analyze Statistical & Rational Hypotheses"
 
-  - id: finish
-    input: [cash_dispensed]
-    output: [end]
-    label: "End Transaction"
+  - id: accept_uncertainty
+    input: [hypothesis]
+    output: [resolution]
+    condition: "user['need_for_closure'] <= 30"
+    label: "Accept Lack of Closure"
 ```
 
 ## CLI Usage
@@ -91,11 +88,11 @@ Validate YAML models from the command line:
 
 ### Syntax validation (validates structure against JSON Schema)
 
-`python -m strumyk.cli validate-syntax path/to/model.yaml path/to/schema.json`
+`python -m strumyk.cli validate-syntax data/example.yaml data/schema.json`
 
 ### Semantic validation (validates WF-net semantics)
 
-`python -m strumyk.cli validate-semantic path/to/model.yaml`
+`python -m strumyk.cli validate-semantic data/example.yaml`
 
 ### Simulator Overview
 
@@ -105,7 +102,7 @@ Simulate process from the command line:
 
 ### Process simulation (for given context)
 
-`python -m strumyk.cli path/to/model.yaml '{"user": {"pin_correct": true, "balance": 100, "amount": 90}}'`
+`python -m strumyk.cli data/example.yaml '{"user": {"open_mindedness": 55, "need_for_closure": 25}}'`
 
 ## Python API Usage
 
@@ -115,8 +112,8 @@ How to use the validators in your Python code:
 from strumyk.syntax_validator import SyntaxValidator
 from strumyk.semantic_validator import SemanticValidator
 
-yaml_file = "example.yaml"
-schema_file = "schema.json"
+yaml_file = "data/example.yaml"
+schema_file = "data/schema.json"
 
 # --- Syntax Validation ---
 syntax_validator = SyntaxValidator(yaml_file, schema_file)
@@ -132,8 +129,8 @@ How to use the simulator in your Python code:
 ```
 from strumyk.simulator import Simulator
 
-yaml_file = "example.yaml"
-context = '{"user": {"email": john.doe@example.com}}'
+yaml_file = "data/example.yaml"
+context = '{"user": {"open_mindedness": 55, "need_for_closure": 25}}'
 
 # --- Process simulation ---
 simulator = Simulator(yaml_file, context)
